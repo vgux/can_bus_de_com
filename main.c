@@ -193,10 +193,24 @@ int main(void)
 		HAL_Delay(1000);
 */
 
-	  if(HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) > 0)
+	  // Receiving everything!
+	  /*if(HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) > 0)
 	  {
 		  HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData);
 		  HAL_Delay(10);
+	  }*/
+
+	  // Receiving specific DLC
+	  // Doesn't work all the time :/
+	  if(HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) > 0)
+	  {
+		  if(RxHeader.DLC == 8) {
+			  HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData);
+			  RxData[7] = '\0';
+			  printf("%s\n", RxData);
+		  } else {
+			  HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &RxHeader, RxData);
+		  }
 	  }
   }
   /* USER CODE END 3 */
